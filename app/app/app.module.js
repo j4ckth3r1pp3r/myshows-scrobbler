@@ -1,11 +1,9 @@
 'use strict';
 
 // Define the `phonecatApp` module
-angular.module('phonecatApp', [
+var mainApp = angular.module('main', [
   'ngAnimate',
   'ngRoute',
   'ngSanitize',
-  'core',
-  'phoneDetail',
-  'phoneList'
+  'windowTitle'
 ]);

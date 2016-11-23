@@ -1,29 +1,27 @@
 <!doctype html>
-<html lang="en" ng-app="phonecatApp">
+<html lang="en" ng-app="main">
   <head>
     <meta charset="utf-8">
     <title>Google Phone Gallery</title>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css" />
     <link rel="stylesheet" href="app.css" />
-    <link rel="stylesheet" href="app.animations.css" />
 
-    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script>window.$ = window.jQuery = require('jquery');</script>
+
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+
     <script src="app.module.js"></script>
+    <script src="app.controller.js"></script>
     <script src="app.config.js"></script>
-    <script src="app.animations.js"></script>
-    <script src="core/core.module.js"></script>
-    <script src="core/checkmark/checkmark.filter.js"></script>
-    <script src="core/phone/phone.module.js"></script>
-    <script src="core/phone/phone.service.js"></script>
-    <script src="phone-list/phone-list.module.js"></script>
-    <script src="phone-list/phone-list.component.js"></script>
-    <script src="phone-detail/phone-detail.module.js"></script>
-    <script src="phone-detail/phone-detail.component.js"></script>
+
+    <script src="core/window/title/window.title.module.js"></script>
+    <script src="core/window/title/window.title.factory.js"></script>
+    <script src="core/window/title/window.title.controller.js"></script>
   </head>
   <body>
 
