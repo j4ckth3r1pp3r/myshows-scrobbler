@@ -10,6 +10,9 @@ angular.
         when('/', {
           template: '<main></main>'
         }).
+        when('/auth/:authCode', {
+          template: '<h1>kek</h1>'
+        }).
         otherwise('/');
     }
   ]);

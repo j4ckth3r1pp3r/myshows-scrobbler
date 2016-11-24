@@ -9,6 +9,20 @@ const BrowserWindow = electron.BrowserWindow
 let mainWindow
 
 function createWindow () {
+
+  electron.protocol.registerStringProtocol('myshows', function (request, callback) {
+    let url = request.url.substr(38);
+
+    mainWindow.loadURL(`file://${__dirname}/app/app/index.html#!/auth/`+url);
+    console.log('url: %s', url);
+
+    callback(url);
+  }, function (err) {
+    if (!err) {
+      console.log('Registered protocol succesfully');
+    }
+  });
+
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600, title: 'Loading...'})
 
@@ -16,9 +30,8 @@ function createWindow () {
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/app/app/index.html`)
 
-
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -33,6 +46,7 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
