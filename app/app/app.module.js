@@ -5,5 +5,7 @@ var mainApp = angular.module('main', [
   'ngAnimate',
   'ngRoute',
   'ngSanitize',
-  'windowTitle'
+  'windowTitle',
+  'auth',
+  'index'
 ]);

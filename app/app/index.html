@@ -7,7 +7,20 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css" />
     <link rel="stylesheet" href="app.css" />
 
-    <script>window.$ = window.jQuery = require('jquery');</script>
+    <script>
+      window.$ = window.jQuery = require('jquery');
+      const ipcRenderer = require('electron').ipcRenderer;
+
+      document.addEventListener('dragover',function(event){
+        event.preventDefault();
+        return false;
+      },false);
+
+      document.addEventListener('drop',function(event){
+        event.preventDefault();
+        return false;
+      },false);
+    </script>
 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
@@ -22,6 +35,13 @@
     <script src="core/window/title/window.title.module.js"></script>
     <script src="core/window/title/window.title.factory.js"></script>
     <script src="core/window/title/window.title.controller.js"></script>
+
+    <script src="auth/auth.module.js"></script>
+    <script src="auth/auth.factory.js"></script>
+    <script src="auth/auth.controller.js"></script>
+
+    <script src="index/index.module.js"></script>
+    <script src="index/index.controller.js"></script>
   </head>
   <body>
 

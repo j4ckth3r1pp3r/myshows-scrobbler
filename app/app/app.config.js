@@ -11,7 +11,10 @@ angular.
           template: '<main></main>'
         }).
         when('/auth/:authCode', {
-          template: '<h1>kek</h1>'
+          template: '<auth></auth>'
+        }).
+        when('/index', {
+          template: '<index></index>'
         }).
         otherwise('/');
     }

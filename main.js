@@ -4,19 +4,20 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
+const ipcMain = electron.ipcMain;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let authWindow
 
 function createWindow () {
 
   electron.protocol.registerStringProtocol('myshows', function (request, callback) {
-    let url = request.url.substr(38);
+    let code = request.url.substr(38);
 
-    mainWindow.loadURL(`file://${__dirname}/app/app/index.html#!/auth/`+url);
-    console.log('url: %s', url);
+    mainWindow.loadURL(`file://${__dirname}/app/app/index.html#!/auth/`+code);
+    authWindow.close();
 
-    callback(url);
   }, function (err) {
     if (!err) {
       console.log('Registered protocol succesfully');
@@ -24,7 +25,7 @@ function createWindow () {
   });
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600, title: 'Loading...'})
+  mainWindow = new BrowserWindow({width: 800, height: 600, show: false, title: 'Loading...', backgroundColor: '#e8e8e8'})
 
   // mainWindow.setMenu(null);
   // and load the index.html of the app.
@@ -39,6 +40,11 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
+  })
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+    console.log('ready');
   })
 }
 
@@ -65,8 +71,34 @@ app.on('activate', function () {
   }
 })
 
+ipcMain.on('createAuthWindow', function(event, arg) {
+   createAuthWindow(arg);
+});
 
+function createAuthWindow (link) {
 
+  authWindow = new BrowserWindow({
+    width: 600,
+    height: 650,
+    show: false,
+    modal: true,
+    skipTaskbar: false,
+    resizable: false,
+    title: 'Авторизация',
+    backgroundColor: '#000',
+    'node-integration': false, });
+
+    authWindow.setMenu(null);
+
+    authWindow.on('page-title-updated', function(event) {
+      event.preventDefault();
+    });
+
+    authWindow.loadURL(link);
+    authWindow.once('ready-to-show', () => {
+      authWindow.show()
+    })
+}
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
