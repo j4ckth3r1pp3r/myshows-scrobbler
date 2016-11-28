@@ -23,8 +23,14 @@ input, button, textarea, :focus {
 
 .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
   color: #9d9d9d;
+  cursor: inherit;
 }
 
 .navbar-inverse {
   border-radius: 0px;
+}
+
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
 }

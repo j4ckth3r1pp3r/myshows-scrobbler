@@ -14,6 +14,9 @@ userinfoModule.
 
     return {
       data: userInfo,
-      login: function() {return JSON.parse(localStorage.getItem('userInfo')).login}
+      login: function() {
+        if (localStorage.getItem('userInfo')) return JSON.parse(localStorage.getItem('userInfo')).login;
+        else return null;
+      }
     }
 });

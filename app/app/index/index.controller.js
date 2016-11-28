@@ -21,7 +21,7 @@ indexModule.
       //     $(this).html('drop here').css('background','red');
       // })
       $(document).on('test', function() {self.username = userinfo.login()});
-      if (userinfo.login() != null) {
+      if (userinfo.login() !== null) {
         self.username = userinfo.login();
       }
 
