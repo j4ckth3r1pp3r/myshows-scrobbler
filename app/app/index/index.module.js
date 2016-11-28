@@ -1,1 +1,4 @@
-var indexModule = angular.module('index', []);
+var indexModule = angular.module('index', [
+  'userInfo',
+  'msrequest'
+]);

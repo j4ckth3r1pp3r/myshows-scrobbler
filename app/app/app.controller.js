@@ -5,9 +5,8 @@ mainApp.
         var self = this;
         self.title = windowTitle;
         self.authInfo = authInfo;
-        self.title.name = 'no';
+        self.title.name = 'MyShows Scrobbler (Не авторизирован)';
 
-        // $location.path('/index');
 
         self.isAuthorized = localStorage.getItem('access_token') || false;
 

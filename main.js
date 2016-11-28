@@ -43,8 +43,9 @@ function createWindow () {
   })
 
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
-    console.log('ready');
+    setTimeout(function() {
+      mainWindow.show();
+    }, 500);
   })
 }
 

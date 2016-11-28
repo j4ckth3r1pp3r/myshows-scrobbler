@@ -1,6 +1,16 @@
 body {
   background-color: #e8e8e8;
-  padding: 20px;
+}
+
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+input, button, textarea, :focus {
+    outline: none; // You should add some other style for :focus to help UX/a11y
 }
 
 .draggable {
@@ -9,4 +19,12 @@ body {
   background: #d0d0d0;
   text-align: center;
   -webkit-app-region: drag;
+}
+
+.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
+  color: #9d9d9d;
+}
+
+.navbar-inverse {
+  border-radius: 0px;
 }
