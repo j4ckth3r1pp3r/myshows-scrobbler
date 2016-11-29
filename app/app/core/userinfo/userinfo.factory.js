@@ -8,7 +8,7 @@ userinfoModule.
       userInfo = self.msrequest.get('profile.Get').then(function(response) {
         localStorage.setItem('userInfo', JSON.stringify(response.data.result.user));
         userInfo = response.data.result.user
-        $(document).trigger('test');
+        $(document).trigger('userInfoDone');
       });
     } else userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
@@ -17,6 +17,16 @@ userinfoModule.
       login: function() {
         if (localStorage.getItem('userInfo')) return JSON.parse(localStorage.getItem('userInfo')).login;
         else return null;
+      },
+      avatar: function(data = null) {
+        if (data === null) {
+          if (localStorage.getItem('userInfo')) return JSON.parse(localStorage.getItem('userInfo')).avatar;
+          else return null;
+        } else {
+          var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+          userInfo.avatar = data;
+          localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        }
       }
     }
 });

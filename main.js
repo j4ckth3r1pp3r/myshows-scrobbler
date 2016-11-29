@@ -4,7 +4,16 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
-const ipcMain = electron.ipcMain;
+const ipcMain = electron.ipcMain; //Взаимодействия бека с фронтом
+
+const fs = require('fs'); //Файловая система
+
+const appdata = app.getPath('userData') + '/'; //Папка для сохранения в локалке
+
+const request = require('request');
+
+const wincmd = require('node-windows');
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -16,11 +25,11 @@ function createWindow () {
     let code = request.url.substr(38);
 
     mainWindow.loadURL(`file://${__dirname}/app/app/index.html#!/auth/`+code);
-    authWindow.close();
+    authWindow.destroy();
 
   }, function (err) {
-    if (!err) {
-      console.log('Registered protocol succesfully');
+    if (err) {
+      throw err;
     }
   });
 
@@ -76,6 +85,7 @@ ipcMain.on('createAuthWindow', function(event, arg) {
    createAuthWindow(arg);
 });
 
+
 function createAuthWindow (link) {
 
   authWindow = new BrowserWindow({
@@ -97,9 +107,43 @@ function createAuthWindow (link) {
 
     authWindow.loadURL(link);
     authWindow.once('ready-to-show', () => {
-      authWindow.show()
+      authWindow.show();
     })
 }
+
+function saveFile (arg) {
+  request.get({url: arg.fileLink, encoding: 'binary'}, function (err, response, body) {
+    fs.writeFile(appdata + arg.fileName, body, 'binary', function(err) {
+      if(err)
+        throw err;
+      else
+        console.log("The file was saved!");
+    });
+  });
+}
+
+ipcMain.on('saveFile', function(event, arg) {
+   saveFile(arg);
+});
+
+ipcMain.on('testcmd', function (event, arg = {}) {
+  // var exec = require('child_process').exec;
+  // exec('tasklist', function(err, stdout, stderr) {
+  //   console.log(stdout);
+  //   // stdout is a string containing the output of the command.
+  //   // parse it and look for the apache and mysql processes.
+  // });
+  setInterval(function() {
+    wincmd.list(function(svc){
+      // console.log(svc);
+      for (let process of svc) {
+        if (process.ImageName == 'PotPlayerMini.exe')  {
+          event.sender.send('testcmd', process.WindowTitle.match(/(.*)\s-\s/)[1])
+        };
+      }
+    },true);
+  }, 10000);
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

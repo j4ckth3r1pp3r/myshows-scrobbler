@@ -8,9 +8,7 @@ mainApp.
         self.title.name = 'MyShows Scrobbler (Не авторизирован)';
 
 
-        self.isAuthorized = localStorage.getItem('access_token') || false;
-
-        if (self.isAuthorized) {
+        if (isAuthorized()) {
           $location.path('/index');
         }
 
