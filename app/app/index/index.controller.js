@@ -4,7 +4,7 @@ indexModule.
     controller: function(windowTitle, $http, userinfo, $location, msrequest) {
       var self = this;
       self.title = windowTitle;
-      self.title.name = 'MyShows Scrobbler';
+      self.title.name = 'MScrobbler';
 
       self.username = 'Wait...';
       self.avatar = `file:///${__dirname}/img/loading.gif`;
@@ -31,8 +31,8 @@ indexModule.
           fileName: self.username + '.jpg',
           fileLink: userinfo.avatar()
         });
-        userinfo.avatar(appdata + self.username + '.jpg');
         self.avatar = userinfo.avatar();
+        userinfo.avatar(appdata + self.username + '.jpg');
       });
       if (userinfo.login() !== null) {
         self.username = userinfo.login();
