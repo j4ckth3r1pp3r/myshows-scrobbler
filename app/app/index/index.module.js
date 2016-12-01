@@ -1,4 +1,5 @@
 var indexModule = angular.module('index', [
   'userInfo',
-  'msrequest'
+  'msrequest',
+  'tabs'
 ]);

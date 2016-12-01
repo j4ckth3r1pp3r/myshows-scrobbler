@@ -14,6 +14,12 @@ const request = require('request');
 
 const wincmd = require('node-windows');
 
+const appSettingsDefault = JSON.stringify({
+  playerProcessPeriod: 60000,
+});
+
+var appSettings = {};
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -122,28 +128,60 @@ function saveFile (arg) {
   });
 }
 
+//---- Читаем настройки и загоняем в переменную, если отсутствуют записываем дефолтные ----//
+try {
+  appSettings = fs.readFileSync(appdata + 'settings.json',  'utf8');
+} catch (err) {
+  //---- Бросаем ошибку если это не отсутствие файла ----//
+  if (err.code !== 'ENOENT') throw err;
+
+  //---- Создаем новый, если отсутствует ----//
+  fs.writeFile(appdata + 'settings.json', appSettingsDefault, (err) => {
+    if (err) throw err;
+    console.log('Default settings created!');
+  });
+  appSettings = appSettingsDefault;
+}
+
+//---- Возвращаем настройки в жисонъ ----//
+appSettings = JSON.parse(appSettings);
+
+
 ipcMain.on('saveFile', function(event, arg) {
    saveFile(arg);
 });
 
-ipcMain.on('testcmd', function (event, arg = {}) {
-  // var exec = require('child_process').exec;
-  // exec('tasklist', function(err, stdout, stderr) {
-  //   console.log(stdout);
-  //   // stdout is a string containing the output of the command.
-  //   // parse it and look for the apache and mysql processes.
-  // });
-  setInterval(function() {
-    wincmd.list(function(svc){
-      // console.log(svc);
-      for (let process of svc) {
-        if (process.ImageName == 'PotPlayerMini.exe')  {
-          event.sender.send('testcmd', process.WindowTitle.match(/(.*)\s-\s/)[1])
-        };
-      }
-    },true);
-  }, 10000);
-});
+//---- Детектим плеер для скробблерства и посылаем на фронт ответ ----//
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+var playerProcessAnswer,
+playerProcessLastState = '',
+playerInfo = {};
+
+var serialNameRegExp = /([^\s]*s\d{1,4}.{0,1}e\d{1,4}[^\s]*)/;
+var otherVideoRegExp = /([^\s]*\.[^\s]*)/;
+
+ipcMain.on('PlayerProcess', function (event, arg = {}) {
+  setInterval(function() {
+
+    playerInfo.isSerial = false;
+
+    wincmd.list(function(svc){
+
+      var playerProcess = svc.find(({ImageName}) => ImageName === 'PotPlayerMini.exe');
+
+      if (playerProcess && playerProcess.WindowTitle.match(serialNameRegExp)) {
+        playerProcessAnswer = playerProcess.WindowTitle.match(serialNameRegExp)[1];
+        playerInfo.isSerial = true;
+      } else if (playerProcess && playerProcess.WindowTitle.match(otherVideoRegExp)) {
+        playerProcessAnswer = playerProcess.WindowTitle.match(otherVideoRegExp)[1];
+      } else playerProcessAnswer = 'Player hasn\'t started yet';
+
+      //---- Если состояние поменялось, отправляем на фронт и потом записываем новое состояние ----//
+      if (playerProcessAnswer !== playerProcessLastState) {
+        playerInfo.answer = playerProcessAnswer;
+        event.sender.send('PlayerProcess-callback', playerInfo);
+      };
+      playerProcessLastState = playerProcessAnswer;
+    },true);
+  }, appSettings.playerProcessPeriod);
+});

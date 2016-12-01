@@ -1,7 +1,12 @@
 <nav class="navbar navbar-default navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Myshows Scrobbler</a>
+          <a class="navbar-brand" href="#">MScrobbler <span ng-show="$ctrl.title.play" class="glyphicon glyphicon-play navbar-icon"></span></a>
+          <ul class="nav navbar-nav">
+            <li class="active">
+              <a href="#">{{$ctrl.title.scrobblerTab}}</a>
+            </li>
+          </ul>
         </div>
         <div class="collapse navbar-collapse just-right">
           <ul class="nav navbar-nav navbar-right">
@@ -28,6 +33,4 @@
   </div>
 </div>
 
-<div class="container-fluid">
-  <h1>Для продолжения перетащите файл</h1>
-</div>
+<tab></tab>

@@ -29,6 +29,8 @@ input, button, textarea, :focus {
 
   transition: all 0.5s ease;
   opacity: 0;
+
+  display: none;
 }
 
 .draggable.dragover {
@@ -93,4 +95,9 @@ a:hover, a img {
 }
 .inverse-dropdown .divider {
   background-color: #000;
+}
+
+
+.navbar-icon {
+  font-size: 15px;
 }
