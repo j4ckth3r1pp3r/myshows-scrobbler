@@ -69,7 +69,21 @@ a:hover, a img {
 .avatar {
   border-radius: 50%;
   width: 30px;
-  margin-right: 3px;
+  margin-left: 3px;
+}
+
+.before-avatar {
+  display: inline-block;
+  position: absolute;
+  height: 30px;
+}
+
+.dropdown a, .before-avatar {
+  transition: all 0.5s ease;
+}
+
+.dropdown-toggle.with-avatar:hover .before-avatar {
+  box-shadow: inset 0px 0px 4px 1px rgba(255,255,255,0.5);
 }
 
 .dropdown-toggle.with-avatar {

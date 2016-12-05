@@ -1,3 +1,12 @@
-<h1>{{serialInfo.answer}}</h1>
+<div class="" ng-show="isLoaded">
+  <div>{{myshowsInfo.byFile.ruTitle}}</div>
 
-<div>{{myshowsInfo.ruTitle}}</div>
+  <img ng-src="{{myshowsInfo.byFile.image}}">
+
+  <p>{{myshowsInfo.lastEpisode.shortName}}</p>
+
+</div>
+
+<div class='uil-facebook-css loading' ng-hide="isLoaded">
+  <div></div><div></div><div></div>
+</div>

@@ -10,11 +10,12 @@ tabsModule.
 
       ipcRenderer.send('PlayerProcess');
       ipcRenderer.on('PlayerProcess-callback', (event, arg) => {
+
         $timeout(function(){
           self.serialInfo.answer = arg.answer;
           if (arg.isSerial) {
             windowTitle.name = windowTitle.appName + ' - ' + arg.answer;
-            windowTitle.play = true;
+            windowTitle.playStatus = true;
             self.currentTab = 'tabs/parts/serial/serial.template.html'
             setTimeout(function() {
               $(document).trigger('serialEvent');
@@ -23,10 +24,11 @@ tabsModule.
           else {
             self.currentTab = self.defaultTab;
             windowTitle.name = windowTitle.appName;
+            windowTitle.playStatus = false;
           };
              self.startString = arg.answer;
-             windowTitle.play = false;
         }, 0);
+
       });
 
       this.tabTemplate = () => self.currentTab;

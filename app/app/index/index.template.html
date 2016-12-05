@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">MScrobbler <span ng-show="$ctrl.title.play" class="glyphicon glyphicon-play navbar-icon"></span></a>
+          <a class="navbar-brand" href="#">MScrobbler <span ng-show="$ctrl.title.playStatus" class="glyphicon glyphicon-play navbar-icon"></span></a>
           <ul class="nav navbar-nav">
             <li class="active">
               <a href="#">{{$ctrl.title.scrobblerTab}}</a>
@@ -12,7 +12,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a href="#" class="dropdown-toggle with-avatar" data-toggle="dropdown">
-                <img ng-src="{{$ctrl.avatar}}" class="avatar"> {{$ctrl.username}}  <b class="caret"></b>
+                {{$ctrl.username}} <div class="before-avatar avatar"></div> <img ng-src="{{$ctrl.avatar}}" class="avatar"> <b class="caret"></b>
               </a>
               <ul class="dropdown-menu inverse-dropdown">
                 <li><a href="#">Настройки</a></li>

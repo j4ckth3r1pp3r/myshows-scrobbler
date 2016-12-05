@@ -4,6 +4,6 @@ windowTitleModule.
       name: 'Главная',
       appName: 'MScrobbler',
       scrobblerTab: 'Скробблер',
-      play: false,
+      playStatus: false,
     }
 });
