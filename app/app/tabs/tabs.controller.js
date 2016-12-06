@@ -1,6 +1,6 @@
 tabsModule.
   component('tab', {
-    template: '<ng-include src="$ctrl.tabTemplate()"/>',
+    template: '<ng-include class="change-tabs" src="$ctrl.tabTemplate()"/>',
     controller: function($timeout, serialInfo, windowTitle) {
       var self = this;
       self.startString = 'Для продолжения перетащите файл';
@@ -8,7 +8,8 @@ tabsModule.
       self.currentTab = self.defaultTab;
       self.serialInfo = serialInfo;
 
-      ipcRenderer.send('PlayerProcess');
+      //---- Запускаем интевал проверки на плеер ----//
+      // ipcRenderer.send('PlayerProcess', 'timer');
       ipcRenderer.on('PlayerProcess-callback', (event, arg) => {
 
         $timeout(function(){

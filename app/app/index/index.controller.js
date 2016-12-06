@@ -39,6 +39,8 @@ indexModule.
         self.avatar = userinfo.avatar();
       }
 
+      self.RefreshStatus = () => {ipcRenderer.send('PlayerProcess', 'force')};
+
       //---- Функции для Drag'n'Drop ----//
       // var holder = document.querySelector('.draggable');
       //

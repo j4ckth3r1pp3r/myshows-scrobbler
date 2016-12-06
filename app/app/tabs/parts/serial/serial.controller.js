@@ -1,12 +1,14 @@
 tabsModule.
-  controller('serialController', function($scope, serialInfo, msrequest, $sanitize) {
+  controller('serialController', function($scope, serialInfo, msrequest, $sanitize, $timeout) {
     var self = this;
     $scope.serialInfo = serialInfo;
     $scope.myshowsInfo = {};
-    $scope.isLoaded = false;
 
     //---- Получаем инфу по названию файла ----//
     function getSerialInfo () {
+
+      $scope.isLoaded = false;
+
       msrequest.get('shows.SearchByFile', {'file': $scope.serialInfo.answer}).then((r) => {
         $scope.serialTemplate = `found`;
         $scope.myshowsInfo.byFile = r.data.result.show;
@@ -33,7 +35,9 @@ tabsModule.
       msrequest.get('shows.Episode', {'id': episodeId}).then((r) => {
         $scope.myshowsInfo.lastEpisode = r.data.result;
         // console.log($scope.myshowsInfo.lastEpisode);
-        $scope.isLoaded = true;
+        $timeout(function() {
+          $scope.isLoaded = true;
+        }, 1000);
       });
     }
 

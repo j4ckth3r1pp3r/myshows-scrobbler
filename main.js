@@ -3,16 +3,13 @@ const electron = require('electron')
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
-
 const ipcMain = electron.ipcMain; //Взаимодействия бека с фронтом
-
 const fs = require('fs'); //Файловая система
-
 const appdata = app.getPath('userData') + '/'; //Папка для сохранения в локалке
-
-const request = require('request');
-
-const wincmd = require('node-windows');
+const request = require('request'); //Запросы на файлы
+const wincmd = require('node-windows'); //Чекаем процессы
+const {Tray, Menu} = require('electron');
+let tray = null;
 
 const appSettingsDefault = JSON.stringify({
   playerProcessPeriod: 60000,
@@ -27,6 +24,24 @@ let authWindow
 
 function createWindow () {
 
+  tray = new Tray('logo.png')
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Развернуть', click:  function(){
+           mainWindow.show();
+       } },
+       { label: 'Выйти', click:  function(){
+           app.isQuiting = true;
+           app.quit();
+
+       } }
+  ])
+  tray.setToolTip('MScrobbler')
+  tray.setContextMenu(contextMenu)
+
+  tray.on('double-click', () => {
+    mainWindow.show();
+  })
+
   electron.protocol.registerStringProtocol('myshows', function (request, callback) {
     let code = request.url.substr(38);
 
@@ -40,7 +55,18 @@ function createWindow () {
   });
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600, show: false, title: 'Loading...', backgroundColor: '#e8e8e8'})
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+
+    'min-width': 750,
+    'min-height': 600,
+
+    show: false,
+    title: 'Loading...',
+    backgroundColor: '#e8e8e8',
+    icon: 'logo.png'
+  })
 
   // mainWindow.setMenu(null);
   // and load the index.html of the app.
@@ -49,25 +75,33 @@ function createWindow () {
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
+  mainWindow.on('minimize',function(event){
+        event.preventDefault()
+            mainWindow.hide();
+    });
+
+
+  mainWindow.on('close', function (event) {
+        if( !app.isQuiting){
+            event.preventDefault()
+            mainWindow.hide();
+        }
+        return false;
+    });
 
   mainWindow.once('ready-to-show', () => {
     setTimeout(function() {
       mainWindow.show();
     }, 500);
   })
+
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
+
 
 
 // Quit when all windows are closed.
@@ -161,27 +195,39 @@ var serialNameRegExp = /([^\s]*s\d{1,4}.{0,1}e\d{1,4}[^\s]*)/;
 var otherVideoRegExp = /([^\s]*\.[^\s]*)/;
 
 ipcMain.on('PlayerProcess', function (event, arg = {}) {
-  setInterval(function() {
 
-    playerInfo.isSerial = false;
+  if (arg == 'timer') sendPlayerEventByInterval(event);
+  else if (arg == 'force') sendPlayerEvent(event);
 
-    wincmd.list(function(svc){
 
-      var playerProcess = svc.find(({ImageName}) => ImageName === 'PotPlayerMini.exe');
-
-      if (playerProcess && playerProcess.WindowTitle.match(serialNameRegExp)) {
-        playerProcessAnswer = playerProcess.WindowTitle.match(serialNameRegExp)[1];
-        playerInfo.isSerial = true;
-      } else if (playerProcess && playerProcess.WindowTitle.match(otherVideoRegExp)) {
-        playerProcessAnswer = playerProcess.WindowTitle.match(otherVideoRegExp)[1];
-      } else playerProcessAnswer = 'Player hasn\'t started yet';
-
-      //---- Если состояние поменялось, отправляем на фронт и потом записываем новое состояние ----//
-      if (playerProcessAnswer !== playerProcessLastState) {
-        playerInfo.answer = playerProcessAnswer;
-        event.sender.send('PlayerProcess-callback', playerInfo);
-      };
-      playerProcessLastState = playerProcessAnswer;
-    },true);
-  }, appSettings.playerProcessPeriod);
 });
+
+function sendPlayerEvent (event) {
+
+  playerInfo.isSerial = false;
+
+  wincmd.list(function(svc){
+
+    var playerProcess = svc.find(({ImageName}) => ImageName === 'PotPlayerMini.exe');
+
+    if (playerProcess && playerProcess.WindowTitle.match(serialNameRegExp)) {
+      playerProcessAnswer = playerProcess.WindowTitle.match(serialNameRegExp)[1];
+      playerInfo.isSerial = true;
+    } else if (playerProcess && playerProcess.WindowTitle.match(otherVideoRegExp)) {
+      playerProcessAnswer = playerProcess.WindowTitle.match(otherVideoRegExp)[1];
+    } else playerProcessAnswer = 'Player hasn\'t started yet';
+
+    //---- Если состояние поменялось, отправляем на фронт и потом записываем новое состояние ----//
+    if (playerProcessAnswer !== playerProcessLastState) {
+      playerInfo.answer = playerProcessAnswer;
+      event.sender.send('PlayerProcess-callback', playerInfo);
+    };
+    playerProcessLastState = playerProcessAnswer;
+  },true);
+}
+
+function sendPlayerEventByInterval(event) {
+  setInterval(function() {
+    sendPlayerEvent(event);
+  }, appSettings.playerProcessPeriod);
+}

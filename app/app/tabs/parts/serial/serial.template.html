@@ -1,10 +1,10 @@
 <div ng-controller="serialController">
   <ng-switch on="serialTemplate">
-    <div ng-switch-when="found">
-      <ng-include src="'tabs/parts/serial/serial.success.template.html'"/>
+    <div ng-switch-when="found" class="change-tabs">
+      <ng-include src="'tabs/parts/serial/serial.success.template.html'" />
     </div>
-    <div ng-switch-when="notfound">
-      <ng-include src="'tabs/parts/serial/serial.error.template.html'"/>
+    <div ng-switch-when="notfound" class="change-tabs">
+      <ng-include src="'tabs/parts/serial/serial.error.template.html'" />
     </div>
   </ng-switch>
 </div>

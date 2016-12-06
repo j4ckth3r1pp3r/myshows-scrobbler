@@ -1,17 +1,58 @@
-/*.ng-hide-add {
-  animation: 0.5s fadeOut ease;
+.serial-loading.ng-hide-add {
+  animation: 1s fadeOut ease;
 }
 
-.ng-hide-remove {
-  animation: 0.5s fadeIn ease;
-}*/
+.serial-loading.ng-hide-remove {
+  animation: 1s fadeIn ease;
+}
 
 .navbar-brand .ng-hide-add {
-  animation: toLeft 0.5s  ease;
+  animation: scaleToX 0.5s  ease;
 }
 
 .navbar-brand .ng-hide-remove {
-  animation: fromLeft 0.5s ease;
+  animation: scaleFromX 0.5s ease;
+}
+
+.change-tabs.ng-enter,
+.change-tabs.ng-leave {
+  transition: all 1s ease;
+}
+
+.change-tabs.ng-enter,
+.change-tabs.ng-leave {
+  position: absolute;
+}
+
+.change-tabs.ng-enter, .newSerialClass {
+  animation: 1s fromLeft ease;
+}
+/*.change-tabs.ng-enter.ng-enter-active {
+  opacity:1;
+}*/
+.change-tabs.ng-leave {
+  animation: 1s toRight ease;
+}
+/*.change-tabs.ng-leave.ng-leave-active {
+  opacity:0;
+}*/
+
+@keyframes fromLeft {
+  from {
+    transform: translateX(-800px);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes toRight {
+  from {
+    transform: translateX(0px);
+  }
+  to {
+    transform: translateX(800px);
+  }
 }
 
 @keyframes fadeIn {
@@ -32,7 +73,7 @@
   }
 }
 
-@keyframes fromLeft {
+@keyframes scaleFromX {
   from {
     transform: scaleX(0);
     width: 0px;
@@ -43,7 +84,7 @@
   }
 }
 
-@keyframes toLeft {
+@keyframes scaleToX {
   from {
     transform: scaleX(1);
     width: 15px;
