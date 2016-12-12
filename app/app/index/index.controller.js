@@ -40,6 +40,10 @@ indexModule.
       }
 
       self.RefreshStatus = () => {ipcRenderer.send('PlayerProcess', 'force')};
+      self.toogleDevTools = () => {ipcRenderer.send('toogleDevTools')};
+
+
+      // ipcRenderer.on('info', (event, arg) => {console.log(arg);});
 
       //---- Функции для Drag'n'Drop ----//
       // var holder = document.querySelector('.draggable');

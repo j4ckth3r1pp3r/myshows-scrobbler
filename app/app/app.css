@@ -3,6 +3,10 @@ body {
   overflow-x: hidden;
 }
 
+* {
+  outline: none !important;
+}
+
 /*---- Not Selectable ----*/
 :not(input):not(textarea),
 :not(input):not(textarea)::after,
@@ -60,6 +64,7 @@ input, button, textarea, :focus {
 
 .navbar-inverse {
   border-radius: 0px;
+  margin-bottom: 0px;
 }
 
 a:hover, a img {
@@ -115,4 +120,32 @@ a:hover, a img {
 
 .navbar-icon {
   font-size: 15px;
+}
+
+.btn-dark {
+  color: #eee;
+  background-image: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+  text-shadow: 0 1px 0 #4c4c4c;
+}
+
+.btn-dark:hover, .btn-dark:focus {
+  background-color: #222;
+  color: #eee;
+  background-position: 0 -15px;
+  background-repeat: repeat-x;
+}
+
+.btn-dark:active {
+  color: #ddd;
+  background-color: #484848;
+}
+
+.serial-loading {
+  background-size: cover;
+  background-position: right top;
+}
+
+.light-background {
+  background-color: #e8e8e8;
+  width: 496px;
 }

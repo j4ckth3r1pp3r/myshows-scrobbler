@@ -16,6 +16,9 @@ msrequestModule.
                   }
                 }).then(response => response.data.error ? $q.reject(response.data.error) : $q.resolve(response));
 
+      },
+      getPage: function (url) {
+        return $http.post(url);
       }
     };
   });

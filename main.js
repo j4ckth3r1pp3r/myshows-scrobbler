@@ -9,6 +9,7 @@ const appdata = app.getPath('userData') + '/'; //Папка для сохран�
 const request = require('request'); //Запросы на файлы
 const wincmd = require('node-windows'); //Чекаем процессы
 const {Tray, Menu} = require('electron');
+const {webContents} = require('electron');
 let tray = null;
 
 const appSettingsDefault = JSON.stringify({
@@ -17,14 +18,12 @@ const appSettingsDefault = JSON.stringify({
 
 var appSettings = {};
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let authWindow
 
 function createWindow () {
 
-  tray = new Tray('logo.png')
+  tray = new Tray(__dirname + '/logo.png')
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Развернуть', click:  function(){
            mainWindow.show();
@@ -59,8 +58,10 @@ function createWindow () {
     width: 800,
     height: 600,
 
-    'min-width': 750,
-    'min-height': 600,
+    minWidth: 800,
+    minHeight: 600,
+    resizable: false,
+    maximizable: false,
 
     show: false,
     title: 'Loading...',
@@ -71,14 +72,6 @@ function createWindow () {
   // mainWindow.setMenu(null);
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/app/app/index.html`)
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools()
-
-  mainWindow.on('minimize',function(event){
-        event.preventDefault()
-            mainWindow.hide();
-    });
 
 
   mainWindow.on('close', function (event) {
@@ -92,8 +85,11 @@ function createWindow () {
   mainWindow.once('ready-to-show', () => {
     setTimeout(function() {
       mainWindow.show();
+      // mainWindow.webContents.send('info', 'hello from main process');
     }, 500);
   })
+
+  mainWindow.setMenuBarVisibility(false);
 
 }
 
@@ -101,6 +97,7 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
+
 
 
 
@@ -197,9 +194,17 @@ var otherVideoRegExp = /([^\s]*\.[^\s]*)/;
 ipcMain.on('PlayerProcess', function (event, arg = {}) {
 
   if (arg == 'timer') sendPlayerEventByInterval(event);
-  else if (arg == 'force') sendPlayerEvent(event);
+  else if (arg == 'force') {
+    //Обнуляем последнее состояние
+    playerProcessLastState = '';
+    sendPlayerEvent(event);
+  }
 
 
+});
+
+ipcMain.on('toogleDevTools', (event, arg = {}) => {
+mainWindow.webContents.toggleDevTools();
 });
 
 function sendPlayerEvent (event) {

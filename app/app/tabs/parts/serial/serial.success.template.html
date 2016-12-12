@@ -1,10 +1,15 @@
-<div class="serial-loading" ng-show="isLoaded">
-  <div>{{myshowsInfo.byFile.ruTitle}}</div>
+<div class="serial-loading" ng-show="isLoaded" style="background-image: url({{serialPage.background}})">
+  <div class="light-background">
+    <div class="container-fluid">
+      <h2 class="title">{{myshowsInfo.byFile.ruTitle}}</h2>
+       <p>Остановился на: <b>{{myshowsInfo.lastEpisode.shortName}}</b></p>
 
-  <img ng-src="{{myshowsInfo.byFile.image}}">
+      <img ng-src="{{myshowsInfo.byFile.image}}">
 
-  <p>{{myshowsInfo.lastEpisode.shortName}}</p>
-
+      <p>Смотришь: {{myshowsInfo.currentEpisode.shortName}}</p>
+      <button class="btn btn-dark" ng-click="checkEpisode()" ng-disabled="checkButton.disabled" ng-hide="myshowsInfo.currentEpisode.watchStatus">{{checkButton.text}}</button>
+    </div>
+  </div>
 </div>
 
 <div class="uil-facebook-css loading serial-loading" ng-hide="isLoaded">
