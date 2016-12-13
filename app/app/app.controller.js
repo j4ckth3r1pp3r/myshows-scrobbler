@@ -7,7 +7,6 @@ mainApp.
         self.authInfo = authInfo;
         self.title.name = 'MScrobbler (Не авторизирован)';
 
-
         if (isAuthorized()) {
           $location.path('/index');
         }
@@ -19,11 +18,6 @@ mainApp.
 
           ipcRenderer.send('createAuthWindow', authUrl);
         }
-
-        $('#templink').click(function() {
-          openWindow();
-        });
-
 
       }
     });

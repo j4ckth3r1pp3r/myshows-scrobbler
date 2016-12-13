@@ -1,10 +1,11 @@
 .serial-loading.ng-hide-add {
-  animation: 1s fadeOut ease;
+  animation: 0.5s fadeOut ease, 0.5s bgToRight ease;
 }
 
 .serial-loading.ng-hide-remove {
-  animation: 1s fadeIn ease;
+  animation: 0.5s fadeIn ease, 0.5s bgFromRight ease;
 }
+
 
 .navbar-brand .ng-hide-add {
   animation: scaleToX 0.5s  ease;
@@ -16,7 +17,7 @@
 
 .change-tabs.ng-enter,
 .change-tabs.ng-leave {
-  transition: all 1s ease;
+  transition: all 0.5s ease;
 }
 
 .change-tabs.ng-enter,
@@ -25,17 +26,23 @@
 }
 
 .change-tabs.ng-enter, .newSerialClass {
-  animation: 1s fromLeft ease;
+  animation: 0.5s fromLeft ease;
 }
-/*.change-tabs.ng-enter.ng-enter-active {
-  opacity:1;
-}*/
 .change-tabs.ng-leave {
-  animation: 1s toRight ease;
+  animation: 0.5s toRight ease;
 }
-/*.change-tabs.ng-leave.ng-leave-active {
-  opacity:0;
-}*/
+
+.episode-check.ng-hide-add, .button-right-image.ng-hide-add {
+  animation: 1s toLeftCheckButton ease-in-out;
+  z-index: 0;
+  position: relative;
+}
+
+.button-right-image.ng-hide-remove {
+  animation: 1s fromLeftCheckButton ease-in-out;
+  z-index: 0;
+  position: relative;
+}
 
 @keyframes fromLeft {
   from {
@@ -52,6 +59,41 @@
   }
   to {
     transform: translateX(800px);
+  }
+}
+
+@keyframes toLeftCheckButton {
+  from {
+    transform: translateX(0px);
+  }
+  to {
+    transform: translateX(-200px);
+  }
+}
+@keyframes fromLeftCheckButton {
+  from {
+    transform: translateX(-200px);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes bgFromRight {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes bgToRight {
+  from {
+    background-position: 100% 0%;
+  }
+  to {
+    background-position: 0% 0%;
   }
 }
 

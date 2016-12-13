@@ -56,6 +56,7 @@ input, button, textarea, :focus {
   color: rgba(35, 35, 35, 0.4);
 }
 
+
 /*---- Index Controller ----*/
 .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
   color: #9d9d9d;
@@ -126,6 +127,8 @@ a:hover, a img {
   color: #eee;
   background-image: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
   text-shadow: 0 1px 0 #4c4c4c;
+  border-radius: 0px;
+  margin-bottom: 10px;
 }
 
 .btn-dark:hover, .btn-dark:focus {
@@ -140,6 +143,10 @@ a:hover, a img {
   background-color: #484848;
 }
 
+.button-right-image.btn {
+  width: 100px;
+}
+
 .serial-loading {
   background-size: cover;
   background-position: right top;
@@ -148,4 +155,33 @@ a:hover, a img {
 .light-background {
   background-color: #e8e8e8;
   width: 496px;
+}
+
+.current-episode {
+  margin-top: 10px;
+  font-size: 1.2em;
+}
+
+.btn-myshows {
+  padding: 3px 8px;
+  font-size: 10px;
+  /*margin-top: -30px;
+  margin-left: 9px;*/
+}
+
+.serial-image {
+  z-index: 1;
+  position: relative;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.serial-image {
+  float: left;
+}
+
+input {
+  transition: all 0.5s ease;
 }

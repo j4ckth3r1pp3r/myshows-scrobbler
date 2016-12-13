@@ -7,5 +7,6 @@ var mainApp = angular.module('main', [
   'ngSanitize',
   'windowTitle',
   'auth',
-  'index'
+  'index',
+  'settings'
 ]);

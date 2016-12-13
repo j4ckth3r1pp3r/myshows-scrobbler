@@ -1,10 +1,11 @@
 indexModule.
   component('index', {
     templateUrl: 'index/index.template.html',
-    controller: function(windowTitle, $http, userinfo, $location, msrequest) {
+    controller: function(windowTitle, $http, userinfo, $location, msrequest, appSettings) {
       var self = this;
       self.title = windowTitle;
       self.title.name = 'MScrobbler';
+      self.appSettings = appSettings;
 
       self.username = 'Wait...';
       self.avatar = `file:///${__dirname}/img/loading.gif`;
@@ -22,6 +23,10 @@ indexModule.
       self.logout = function () {
         localStorage.clear();
         $location.path('/');
+      }
+
+      self.settings = function() {
+        ipcRenderer.send('createSettingsWindow');
       }
 
       //---- Инфа профиля ----//
@@ -42,8 +47,11 @@ indexModule.
       self.RefreshStatus = () => {ipcRenderer.send('PlayerProcess', 'force')};
       self.toogleDevTools = () => {ipcRenderer.send('toogleDevTools')};
 
-
-      // ipcRenderer.on('info', (event, arg) => {console.log(arg);});
+      ipcRenderer.send('getAppSettings');
+      ipcRenderer.on('pushAppSettings', (event, r) => {
+        self.appSettings.all = r;
+        if (self.appSettings.all.autoCheck.enabled) ipcRenderer.send('PlayerProcess', 'timer');
+      });
 
       //---- Функции для Drag'n'Drop ----//
       // var holder = document.querySelector('.draggable');

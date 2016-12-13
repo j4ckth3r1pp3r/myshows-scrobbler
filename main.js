@@ -13,7 +13,11 @@ const {webContents} = require('electron');
 let tray = null;
 
 const appSettingsDefault = JSON.stringify({
-  playerProcessPeriod: 60000,
+  autoCheck: {
+    enabled: true,
+    period: 60000,
+  },
+  playerProcess: 'PotPlayerMini',
 });
 
 var appSettings = {};
@@ -85,7 +89,7 @@ function createWindow () {
   mainWindow.once('ready-to-show', () => {
     setTimeout(function() {
       mainWindow.show();
-      // mainWindow.webContents.send('info', 'hello from main process');
+      // mainWindow.webContents.send('pushAppSettings', appSettings);
     }, 500);
   })
 
@@ -134,7 +138,8 @@ function createAuthWindow (link) {
     resizable: false,
     title: 'Авторизация',
     backgroundColor: '#000',
-    'node-integration': false, });
+    'node-integration': false,
+    icon: 'logo.png' });
 
     authWindow.setMenu(null);
 
@@ -148,6 +153,38 @@ function createAuthWindow (link) {
     })
 }
 
+ipcMain.on('createSettingsWindow', function(event, arg) {
+   createSettingsWindow(arg);
+});
+
+
+function createSettingsWindow () {
+
+  authWindow = new BrowserWindow({
+    width: 600,
+    height: 650,
+    show: false,
+    modal: true,
+    skipTaskbar: false,
+    resizable: false,
+    title: 'Настройки',
+    backgroundColor: '#e8e8e8',
+    icon: 'logo.png' });
+
+    authWindow.setMenu(null);
+
+    authWindow.on('page-title-updated', function(event) {
+      event.preventDefault();
+    });
+
+    authWindow.loadURL(`file://${__dirname}/app/app/index.html#!/settings`);
+    authWindow.once('ready-to-show', () => {
+      setTimeout(function() {
+        authWindow.show();
+      }, 500);
+    })
+}
+
 function saveFile (arg) {
   request.get({url: arg.fileLink, encoding: 'binary'}, function (err, response, body) {
     fs.writeFile(appdata + arg.fileName, body, 'binary', function(err) {
@@ -158,6 +195,10 @@ function saveFile (arg) {
     });
   });
 }
+
+ipcMain.on('saveFile', function(event, arg) {
+  saveFile(arg);
+});
 
 //---- Читаем настройки и загоняем в переменную, если отсутствуют записываем дефолтные ----//
 try {
@@ -177,10 +218,11 @@ try {
 //---- Возвращаем настройки в жисонъ ----//
 appSettings = JSON.parse(appSettings);
 
+//---- Получаем запрос для считывания настроек и отдаем ----//
+ipcMain.on('getAppSettings', (event, arg = {}) => {
+  event.sender.send('pushAppSettings', appSettings);
+})
 
-ipcMain.on('saveFile', function(event, arg) {
-   saveFile(arg);
-});
 
 //---- Детектим плеер для скробблерства и посылаем на фронт ответ ----//
 
@@ -213,7 +255,7 @@ function sendPlayerEvent (event) {
 
   wincmd.list(function(svc){
 
-    var playerProcess = svc.find(({ImageName}) => ImageName === 'PotPlayerMini.exe');
+    var playerProcess = svc.find(({ImageName}) => ImageName === appSettings.playerProcess + '.exe');
 
     if (playerProcess && playerProcess.WindowTitle.match(serialNameRegExp)) {
       playerProcessAnswer = playerProcess.WindowTitle.match(serialNameRegExp)[1];
@@ -234,5 +276,5 @@ function sendPlayerEvent (event) {
 function sendPlayerEventByInterval(event) {
   setInterval(function() {
     sendPlayerEvent(event);
-  }, appSettings.playerProcessPeriod);
+  }, appSettings.autoCheck.period);
 }

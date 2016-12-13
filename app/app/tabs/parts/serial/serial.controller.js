@@ -1,17 +1,25 @@
 tabsModule.
-  controller('serialController', function($scope, serialInfo, msrequest, $sanitize, $timeout) {
+  controller('serialController', function($scope, serialInfo, msrequest, $sanitize, $timeout, appSettings) {
     var self = this;
+    var shell = require('electron').shell;
     $scope.serialInfo = serialInfo;
-    $scope.myshowsInfo = {};
-    $scope.serialPage = {};
-    $scope.checkButton = {};
-    $scope.checkButton.text = 'Отметить';
+
+    $scope.openExternal = function (url) {
+      shell.openExternal(url);
+    }
 
 
     //---- Получаем инфу по названию файла ----//
     function getSerialInfo () {
-
+      //---- Сбрасываем всё состояние
       $scope.isLoaded = false;
+
+      $scope.checkButton = {};
+      $scope.myshowsInfo = {};
+      $scope.serialPage = {};
+      $scope.checkButton.text = 'Отметить';
+      $scope.checkButton.disabled = false;
+      $scope.buttonsRightImageShow = false;
 
       msrequest.get('shows.SearchByFile', {'file': $scope.serialInfo.answer}).then((r) => {
         $scope.myshowsInfo.byFile = r.data.result.show;
@@ -42,27 +50,32 @@ tabsModule.
     //---- Получаем инфу о последнем просмотренном эпизоде ----//
     function getLastSeenEpisode (episodeId) {
       msrequest.get('shows.Episode', {'id': episodeId}).then((r) => {
-        $scope.serialTemplate = `found`;
         $scope.myshowsInfo.lastEpisode = r.data.result;
-        $timeout(function() {
-          $scope.isLoaded = true;
-          $(window).trigger('resize');
-        }, 1000);
 
-        //---- Добавляем фон сериала ----//
-        msrequest.getPage(`https://myshows.me/view/${$scope.myshowsInfo.currentEpisode.showId}/`).then((r) => {
-          r.data = r.data.replace(/body/g, 'bodytag');
-          r.data = r.data.replace(/html/g, 'htmltag');
-          $scope.serialPage.background = $(r.data).find('bodytag').attr('style').match(/url\((.*)\)/)[1];
-          $(window).resize(function() {
-            $('.serial-loading, .light-background').height($(window).height() - 52);
-          });
-
-
-        });
+        lastAction(r);
       });
     }
 
+    function lastAction (r) {
+      $scope.serialTemplate = `found`;
+      $timeout(function() {
+        $scope.isLoaded = true;
+        $(window).trigger('resize');
+        $scope.buttonsRightImageShow = true;
+      }, 1000);
+
+      //---- Добавляем фон сериала ----//
+      msrequest.getPage(`https://myshows.me/view/${$scope.myshowsInfo.currentEpisode.showId}/`).then((r) => {
+        r.data = r.data.replace(/body/g, 'bodytag');
+        r.data = r.data.replace(/html/g, 'htmltag');
+        $scope.serialPage.background = $(r.data).find('bodytag').attr('style').match(/url\((.*)\)/)[1];
+        $(window).resize(function() {
+          $('.serial-loading, .light-background').not('.uil-facebook-css').height($(window).height() - 52);
+        });
+
+
+      });
+    }
 
     $(document).on('serialEvent', function() {
       getSerialInfo();
@@ -73,6 +86,10 @@ tabsModule.
       $scope.checkButton.text = 'Подождите...';
       msrequest.get('manage.CheckEpisode', {'id' : $scope.myshowsInfo.currentEpisode.id}).then((r) => {
         var isCurrentEpisodeNewestThanLast = ($scope.myshowsInfo.lastEpisode.shortName.match(/s(\d*)/)[1] <= $scope.myshowsInfo.currentEpisode.shortName.match(/s(\d*)/)[1]) && ($scope.myshowsInfo.lastEpisode.shortName.match(/e(\d*)/)[1] < $scope.myshowsInfo.currentEpisode.shortName.match(/e(\d*)/)[1]);
+
+        $timeout(function() {
+          $scope.myshowsInfo.currentEpisode.watchStatus = true;
+        }, 4000);
 
         $scope.checkButton.text = 'Отмечено ✓';
         $scope.checkButton.disabled = r.data.result;

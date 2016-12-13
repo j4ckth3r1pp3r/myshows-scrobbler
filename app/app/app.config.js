@@ -8,13 +8,16 @@ angular.
 
       $routeProvider.
         when('/', {
-          template: '<main></main>'
+          template: '<main/>'
         }).
         when('/auth/:authCode', {
-          template: '<auth></auth>'
+          template: '<auth/>'
         }).
         when('/index', {
-          template: '<index></index>'
+          template: '<index/>'
+        }).
+        when('/settings', {
+          template: '<settings/>'
         }).
         otherwise('/');
     }

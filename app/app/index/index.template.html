@@ -21,7 +21,7 @@
                 {{$ctrl.username}} <div class="before-avatar avatar"></div> <img ng-src="{{$ctrl.avatar}}" class="avatar"> <b class="caret"></b>
               </a>
               <ul class="dropdown-menu inverse-dropdown">
-                <li><a href="#">Настройки</a></li>
+                <li><a ng-click="$ctrl.settings()">Настройки</a></li>
                 <li class="divider"></li>
                 <li><a ng-click="$ctrl.logout()">Выход</a></li>
               </ul>

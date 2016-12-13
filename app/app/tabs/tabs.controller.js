@@ -1,7 +1,7 @@
 tabsModule.
   component('tab', {
     template: '<ng-include class="change-tabs" src="$ctrl.tabTemplate()"/>',
-    controller: function($timeout, serialInfo, windowTitle) {
+    controller: function($timeout, serialInfo, windowTitle, appSettings) {
       var self = this;
       self.startString = 'Для продолжения перетащите файл';
       self.defaultTab = 'tabs/tabs.template.html';

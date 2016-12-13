@@ -1,0 +1,14 @@
+<h1 class="text-center">Настраиваем...</h1>
+<div class="container-fluid">
+  {{$ctrl.appSettings}}
+  <br>
+  <form action="#">
+    <div class="checkbox">
+      <label><input type="checkbox" ng-model="$ctrl.appSettings.autoCheck.enabled"> Автопроверка</label>
+    </div>
+    <div class="form-group">
+      <label>Период проверки (в секундах):</label> <input type="number" class="form-control" ng-disabled="!$ctrl.appSettings.autoCheck.enabled" ng-model="$ctrl.periodInSecond" ng-change="$ctrl.periodToMs()"><br>
+      <label>Плеер:</label> <input type="text" class="form-control" ng-model="$ctrl.appSettings.playerProcess">
+    </div>
+  </form>
+</div>
