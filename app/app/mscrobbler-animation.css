@@ -1,8 +1,13 @@
-.serial-loading.ng-hide-add {
+.serial-loading.ng-hide-add,
+.height-550.ng-hide-add,
+.authInfo-screen.ng-hide-add {
   animation: 0.5s fadeOut ease, 0.5s bgToRight ease;
 }
 
-.serial-loading.ng-hide-remove {
+.serial-loading.ng-hide-remove,
+.text-loading.ng-hide-remove,
+.height-550.ng-hide-remove,
+.authInfo-screen.ng-hide-remove {
   animation: 0.5s fadeIn ease, 0.5s bgFromRight ease;
 }
 

@@ -1,7 +1,7 @@
 mainApp.
     component('main', {
       templateUrl: 'main.template.html',
-      controller: function (windowTitle, authInfo, $location, msrequest, $http) {
+      controller: function (windowTitle, authInfo, $location, msrequest, $http, $timeout) {
         var self = this;
         self.title = windowTitle;
         self.authInfo = authInfo;
@@ -9,6 +9,8 @@ mainApp.
         self.authInfoDeprecated = false;
         self.isLoaded = false;
         self.noInternet = false;
+        self.longLoading = false;
+        self.attempt = 0;
 
         msrequest.get('profile.Get', {}).then((r) => {
           $location.path('/index');
@@ -40,12 +42,29 @@ mainApp.
                       localStorage.removeItem('refresh_token');
                     }
                   }
-                  else if (error.status === -1) self.noInternet = true;
+                  else if (error.status === -1) {
+                    $timeout(function() {
+                      self.refreshToken();
+                      if (self.attempt > 3) self.longLoading = true;
+                      if (self.attempt > 9) self.noInternet = true;
+                      self.attempt++;
+                    }, 1000);
+                  };
               });
         }
 
+        self.tryAgain = () => {
+          self.attempt = 0;
+          self.noInternet = false;
+          self.longLoading = false;
+          self.refreshToken();
+          $timeout(function() {
+            self.openAuthWindow();
+          }, 200);
+        }
 
-        self.openAuthWindow = function openAuthWindow () {
+
+        self.openAuthWindow = () => {
 
           var myShowsUrl = 'https://myshows.me/oauth/authorize?response_type=code&';
           var authUrl = myShowsUrl + 'client_id=' + self.authInfo.options.client_id + '&scope=' + self.authInfo.options.scopes + '&redirect_uri=' + self.authInfo.options.redirect_uri;

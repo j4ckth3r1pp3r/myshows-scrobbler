@@ -1,17 +1,19 @@
-<div ng-hide="$ctrl.noInternet">
-  <div class="container-fluid" ng-show="$ctrl.isLoaded">
+<div ng-hide="$ctrl.noInternet" class="authInfo-screen">
+  <div class="container-fluid authInfo-titleNbutton" ng-show="$ctrl.isLoaded">
     <h1>MyShows Scrobbler</h1>
     <a href="#" ng-click="$ctrl.openAuthWindow()" class="btn btn-default">Войти</a><br>
     <h2 ng-show="$ctrl.authInfoDeprecated">Необходимо авторизироваться заново<h2>
   </div>
 
-
-  <div class="uil-facebook-css loading serial-loading" ng-hide="$ctrl.isLoaded">
-    <div></div><div></div><div></div>
+  <div ng-hide="$ctrl.isLoaded" class="height-550">
+    <div class="uil-facebook-css loading loading-main serial-loading">
+      <div></div><div></div><div></div>
+    </div>
+    <p class="text-loading" ng-show="$ctrl.longLoading">Подождите...</p>
   </div>
 </div>
 
 <div class="text-center" ng-show="$ctrl.noInternet">
   <h1>Интернет отсутствует</h1>
-  <button class="btn btn-default" ng-click="$ctrl.refreshToken()">Попробовать ещё</button>
+  <button class="btn btn-default" ng-click="$ctrl.tryAgain()">Попробовать ещё</button>
 </div>

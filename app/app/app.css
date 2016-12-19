@@ -185,3 +185,32 @@ a:hover, a img {
 input {
   transition: all 0.5s ease;
 }
+
+.text-loading {
+  position: relative;
+  width: 200px;
+  text-align: center;
+  margin: 0 auto;
+  top: calc(50% - 10px);
+  font-size: 2em;
+}
+
+.height-550 {
+  height: 550px;
+}
+.loading-main {
+  top: calc(50% - 180px);
+}
+
+[ng-show="$ctrl.noInternet"] {
+  margin-top: calc(25%);
+ }
+ .authInfo-screen {
+   height: 560px;
+ }
+
+ .authInfo-titleNbutton {
+   text-align: center;
+    position: relative;
+    top: 30%;
+ }
