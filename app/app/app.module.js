@@ -8,5 +8,6 @@ var mainApp = angular.module('main', [
   'windowTitle',
   'auth',
   'index',
-  'settings'
+  'settings',
+  'msrequest'
 ]);

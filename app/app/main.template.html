@@ -1,5 +1,17 @@
-<div class="container-fluid">
-  <h1>MyShows Scrobbler</h1>
-  <p>Yay</p>
-  <a href="#" id="templink" class="btn btn-default">Войти</a><br>
+<div ng-hide="$ctrl.noInternet">
+  <div class="container-fluid" ng-show="$ctrl.isLoaded">
+    <h1>MyShows Scrobbler</h1>
+    <a href="#" ng-click="$ctrl.openAuthWindow()" class="btn btn-default">Войти</a><br>
+    <h2 ng-show="$ctrl.authInfoDeprecated">Необходимо авторизироваться заново<h2>
+  </div>
+
+
+  <div class="uil-facebook-css loading serial-loading" ng-hide="$ctrl.isLoaded">
+    <div></div><div></div><div></div>
+  </div>
+</div>
+
+<div class="text-center" ng-show="$ctrl.noInternet">
+  <h1>Интернет отсутствует</h1>
+  <button class="btn btn-default" ng-click="$ctrl.refreshToken()">Попробовать ещё</button>
 </div>
