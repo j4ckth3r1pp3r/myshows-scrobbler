@@ -20,6 +20,13 @@
 .navbar-brand .ng-hide-remove {
   animation: scaleFromX 0.5s ease;
 }
+.personal-player-input.ng-hide-add {
+  animation: toTop 0.5s  ease;
+}
+
+.personal-player-input.ng-hide-remove {
+  animation: fromTop 0.5s ease;
+}
 
 .change-tabs.ng-enter,
 .change-tabs.ng-leave,
@@ -141,5 +148,27 @@ button:disabled {
   to {
     transform: scaleX(0);
     width: 0px;
+  }
+}
+
+@keyframes fromTop {
+  from {
+    transform: scaleY(0) translateY(-200%);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1) translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes toTop {
+  from {
+    transform: scaleY(1) translateY(0px);
+    opacity: 1;
+  }
+  to {
+    transform: scaleY(0) translateY(-200%);
+    opacity: 0;
   }
 }

@@ -8,9 +8,10 @@
       <input type="number" class="form-control" ng-disabled="!$ctrl.appSettings.autoCheck.enabled" ng-model="$ctrl.periodInSecond" ng-change="$ctrl.periodToMs()">
       <br>
       <label>Плеер (<span title="Какой именно плеер нужно использовать">?</span>):</label>
-      <select ng-options="item as item.label for item in $ctrl.playerOptions track by item.process" ng-change="$ctrl.changeOption()" ng-model="$ctrl.playerOptionCurrent">
+      <select class="form-control" ng-options="item as item.label for item in $ctrl.playerOptions track by item.process" ng-change="$ctrl.changeOption()" ng-model="$ctrl.playerOptionCurrent">
       </select>
-      <input type="text" class="form-control" ng-disabled="$ctrl.playerOptionCurrent.process != 'None'" ng-change="$ctrl.checkDifference()" ng-model="$ctrl.appSettings.playerProcess">
+      <br>
+      <input type="text" class="form-control personal-player-input" ng-hide="$ctrl.playerOptionCurrent.process != 'None'" ng-change="$ctrl.checkDifference()" ng-model="$ctrl.appSettings.playerProcess">
     </div>
   </form>
   <button ng-class="$ctrl.saveButtonClass" ng-disabled="$ctrl.isSettingsSaved" ng-click="$ctrl.saveSettings()">{{$ctrl.saveButtonText}}</button>
