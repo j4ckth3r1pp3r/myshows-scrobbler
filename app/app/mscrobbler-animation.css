@@ -7,7 +7,8 @@
 .serial-loading.ng-hide-remove,
 .text-loading.ng-hide-remove,
 .height-550.ng-hide-remove,
-.authInfo-screen.ng-hide-remove {
+.authInfo-screen.ng-hide-remove,
+.success-icon.ng-hide-remove {
   animation: 0.5s fadeIn ease, 0.5s bgFromRight ease;
 }
 
@@ -21,7 +22,8 @@
 }
 
 .change-tabs.ng-enter,
-.change-tabs.ng-leave {
+.change-tabs.ng-leave,
+button:disabled {
   transition: all 0.5s ease;
 }
 

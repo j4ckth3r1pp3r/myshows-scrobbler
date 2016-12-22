@@ -1,14 +1,18 @@
-<h1 class="text-center">Настраиваем...</h1>
 <div class="container-fluid">
-  {{$ctrl.appSettings}}
-  <br>
-  <form action="#">
+  <form action="#" name="settingsForm" style="margin-top: 15px;">
     <div class="checkbox">
-      <label><input type="checkbox" ng-model="$ctrl.appSettings.autoCheck.enabled"> Автопроверка</label>
+      <label><input type="checkbox" ng-change="$ctrl.checkDifference()" ng-model="$ctrl.appSettings.autoCheck.enabled"> Автопроверка (<span title="Проверять плеер на то запущен он или нет">?</span>)</label>
     </div>
     <div class="form-group">
-      <label>Период проверки (в секундах):</label> <input type="number" class="form-control" ng-disabled="!$ctrl.appSettings.autoCheck.enabled" ng-model="$ctrl.periodInSecond" ng-change="$ctrl.periodToMs()"><br>
-      <label>Плеер:</label> <input type="text" class="form-control" ng-model="$ctrl.appSettings.playerProcess">
+      <label>Период проверки (в секундах) (<span title="С какой периодичностью приложение будет проверять плеер">?</span>):</label>
+      <input type="number" class="form-control" ng-disabled="!$ctrl.appSettings.autoCheck.enabled" ng-model="$ctrl.periodInSecond" ng-change="$ctrl.periodToMs()">
+      <br>
+      <label>Плеер (<span title="Какой именно плеер нужно использовать">?</span>):</label>
+      <select ng-options="item as item.label for item in $ctrl.playerOptions track by item.process" ng-change="$ctrl.changeOption()" ng-model="$ctrl.playerOptionCurrent">
+      </select>
+      <input type="text" class="form-control" ng-disabled="$ctrl.playerOptionCurrent.process != 'None'" ng-change="$ctrl.checkDifference()" ng-model="$ctrl.appSettings.playerProcess">
     </div>
   </form>
+  <button ng-class="$ctrl.saveButtonClass" ng-disabled="$ctrl.isSettingsSaved" ng-click="$ctrl.saveSettings()">{{$ctrl.saveButtonText}}</button>
+  <span class="success-icon" ng-show="$ctrl.isSettingsSaved">✓</span>
 </div>

@@ -9,7 +9,13 @@ tabsModule.
       self.serialInfo = serialInfo;
 
       //---- Запускаем интевал проверки на плеер ----//
-      // ipcRenderer.send('PlayerProcess', 'timer');
+      ipcRenderer.on('refreshSettings', (event, r) => {
+        appSettings = r;
+        console.log('New settings:', appSettings);
+        if (appSettings.autoCheck.enabled) ipcRenderer.send('PlayerProcess', 'startTimer');
+        else ipcRenderer.send('PlayerProcess', 'stopTimer');
+      })
+
       ipcRenderer.on('PlayerProcess-callback', (event, arg) => {
 
         $timeout(function(){

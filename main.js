@@ -24,6 +24,7 @@ var appSettings = {};
 
 let mainWindow
 let authWindow
+let settingsWindow
 
 function createWindow () {
 
@@ -160,9 +161,9 @@ ipcMain.on('createSettingsWindow', function(event, arg) {
 
 function createSettingsWindow () {
 
-  authWindow = new BrowserWindow({
-    width: 600,
-    height: 650,
+  settingsWindow = new BrowserWindow({
+    width: 300,
+    height: 350,
     show: false,
     modal: true,
     skipTaskbar: false,
@@ -171,19 +172,21 @@ function createSettingsWindow () {
     backgroundColor: '#e8e8e8',
     icon: 'logo.png' });
 
-    authWindow.setMenu(null);
+    // settingsWindow.setMenu(null);
+    settingsWindow.setMenuBarVisibility(false);
 
-    authWindow.on('page-title-updated', function(event) {
+    settingsWindow.on('page-title-updated', function(event) {
       event.preventDefault();
     });
 
-    authWindow.loadURL(`file://${__dirname}/app/app/index.html#!/settings`);
-    authWindow.once('ready-to-show', () => {
+    settingsWindow.loadURL(`file://${__dirname}/app/app/index.html#!/settings`);
+    settingsWindow.once('ready-to-show', () => {
       setTimeout(function() {
-        authWindow.show();
+        settingsWindow.show();
       }, 500);
     })
 }
+
 
 function saveFile (arg) {
   request.get({url: arg.fileLink, encoding: 'binary'}, function (err, response, body) {
@@ -221,8 +224,23 @@ appSettings = JSON.parse(appSettings);
 //---- Получаем запрос для считывания настроек и отдаем ----//
 ipcMain.on('getAppSettings', (event, arg = {}) => {
   event.sender.send('pushAppSettings', appSettings);
-})
+});
 
+//---- Принимаем новые настройки с окна настроек и записываем в файл ----//
+ipcMain.on('saveSettings', (event, arg = {}) => {
+  mainWindow.webContents.send('refreshSettings', arg);
+  appSettings = arg;
+  fs.writeFile(appdata + 'settings.json', JSON.stringify(appSettings), (err) => {
+    if (err) throw err;
+    console.log('New settings recorded!');
+  });
+});
+
+
+//---- Открытие консоли по клику ----//
+ipcMain.on('toogleDevTools', (event, arg = {}) => {
+  mainWindow.webContents.toggleDevTools();
+});
 
 //---- Детектим плеер для скробблерства и посылаем на фронт ответ ----//
 
@@ -235,7 +253,8 @@ var otherVideoRegExp = /([^\s]*\.[^\s]*)/;
 
 ipcMain.on('PlayerProcess', function (event, arg = {}) {
 
-  if (arg == 'timer') sendPlayerEventByInterval(event);
+  if (arg == 'startTimer') sendPlayerEventByInterval(event);
+  else if (arg == 'stopTimer') sendPlayerEventByInterval('stop');
   else if (arg == 'force') {
     //Обнуляем последнее состояние
     playerProcessLastState = '';
@@ -245,9 +264,6 @@ ipcMain.on('PlayerProcess', function (event, arg = {}) {
 
 });
 
-ipcMain.on('toogleDevTools', (event, arg = {}) => {
-mainWindow.webContents.toggleDevTools();
-});
 
 function sendPlayerEvent (event) {
 
@@ -273,8 +289,14 @@ function sendPlayerEvent (event) {
   },true);
 }
 
+var intervalUpdate;
+
 function sendPlayerEventByInterval(event) {
-  setInterval(function() {
+  if (event == 'stop') {
+    clearInterval(intervalUpdate);
+    return
+  }
+  intervalUpdate = setInterval(function() {
     sendPlayerEvent(event);
   }, appSettings.autoCheck.period);
 }
