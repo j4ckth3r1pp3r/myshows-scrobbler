@@ -1,6 +1,13 @@
 <div class="serial-loading" ng-show="isLoaded" style="background-image: url({{serialPage.background}})">
   <div class="light-background">
     <div class="container-fluid">
+      <div class="close-serial-tab" ng-click="closeSerialTab()">
+        <div class="close-word">
+          Закрыть
+        </div>
+        <span></span>
+        <span></span>
+      </div>
       <h2 class="title">{{myshowsInfo.byFile.ruTitle}}</h2>
        <p>
          Последняя просмотренная серия:

@@ -1,9 +1,10 @@
 settingsModule.
   component('settings', {
     templateUrl: 'core/settings/settings.template.html',
-    controller: function(appSettings) {
+    controller: function(appSettings, $timeout) {
       var self = this;
       self.appSettings = appSettings;
+      console.log('start', self.appSettings);
       self.oldSettings = {};
 
       self.playerOptions = [
@@ -35,10 +36,13 @@ settingsModule.
 
       ipcRenderer.send('getAppSettings');
       ipcRenderer.on('pushAppSettings', (event, r) => {
-        self.appSettings = r;
-        self.periodInSecond = self.appSettings.autoCheck.period / 1000;
-        self.checkDifference();
-        self.playerOptionCurrent = self.playerOptions.find(({process}) => process === self.appSettings.playerProcess) || {process: 'None', label: 'Свой плеер'};
+        $timeout(function() {
+          self.appSettings = r;
+          console.log('New', self.appSettings);
+          self.periodInSecond = self.appSettings.autoCheck.period / 1000;
+          self.checkDifference();
+          self.playerOptionCurrent = self.playerOptions.find(({process}) => process === self.appSettings.playerProcess) || {process: 'None', label: 'Свой плеер'};
+        }, 40);
       });
 
       self.saveSettings = () => {

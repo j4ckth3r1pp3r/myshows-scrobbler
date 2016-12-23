@@ -1,6 +1,8 @@
 body {
   background-color: #e8e8e8;
-  overflow-x: hidden;
+  overflow: hidden;
+  height: 560px;
+  max-height: 560px;
 }
 
 * {
@@ -34,12 +36,16 @@ input, button, textarea, :focus {
 
   transition: all 0.5s ease;
   opacity: 0;
+  visibility: hidden;
 
-  display: none;
+  z-index: 0;
 }
 
 .draggable.dragover {
   opacity: 1;
+  visibility: visible;
+
+  z-index: 999;
 }
 
 .draggable .border {
@@ -53,7 +59,7 @@ input, button, textarea, :focus {
 }
 
 .draggable .border h2 {
-  color: rgba(35, 35, 35, 0.4);
+  color: rgba(35, 35, 35, 0.7);
 }
 
 
@@ -249,3 +255,122 @@ label span[title] {
   padding: 3px;
   float: right;
 }
+
+[href="#"] {
+  cursor: default !important;
+}
+
+/*---- close serial tab ----*/
+
+.close-serial-tab {
+  position: fixed;
+  width: 70px;
+  height: 30px;
+  right: 297px;
+  top: 60px;
+  overflow: hidden;
+}
+
+.close-serial-tab, .close-serial-tab * {
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.close-serial-tab span {
+  display: inline-block;
+  position: absolute;
+  right: 0px;
+  top: 13px;
+  width: 30px;
+  height: 5px;
+  background-color: #000;
+  border-radius: 2px;
+
+}
+
+.close-serial-tab .close-word {
+  display: inline-block;
+
+  font-size: 1.1em;
+  line-height: 2.1em;
+  color: #fff;
+
+  position: relative;
+  right: -5px;
+  z-index: 2;
+
+  opacity: 0;
+  transform: translateX(120px);
+}
+
+.close-serial-tab:hover span {
+    width: 72px;
+    height: 26px;
+    border-radius: 0px;
+    background-image: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+}
+
+.close-serial-tab:hover .close-word {
+  transform: translateX(0px);
+  opacity: 1;
+}
+
+.close-serial-tab span:nth-child(2) {
+  transform: rotate(45deg);
+}
+
+.close-serial-tab span:nth-child(3) {
+  transform: rotate(-45deg);
+}
+
+.close-serial-tab:hover span:nth-child(2), .close-serial-tab:hover span:nth-child(3) {
+  transform: rotate(0);
+}
+
+.close-serial-tab:hover span:nth-child(2) {
+  transform: translateY(10px);
+}
+
+.close-serial-tab:hover span:nth-child(3) {
+  transform: translateY(-10px);
+}
+
+/*.close-serial-tab:hover span:nth-child(2) {
+  animation: 1s firstFigureHover ease;
+  animation-fill-mode:forwards;
+}
+
+.close-serial-tab:hover span:nth-child(3) {
+  animation: 1s secondFigureHover ease;
+  animation-fill-mode:forwards;
+}
+
+@keyframes firstFigureHover {
+  0% {
+    transform: rotate(45deg);
+  }
+  49% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-50px);
+  }
+}
+
+@keyframes secondFigureHover {
+  0% {
+    transform: rotate(-45deg);
+  }
+  49% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(50px);
+  }
+}*/

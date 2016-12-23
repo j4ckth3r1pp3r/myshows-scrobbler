@@ -11,13 +11,18 @@ tabsModule.
       //---- Запускаем интевал проверки на плеер ----//
       ipcRenderer.on('refreshSettings', (event, r) => {
         appSettings = r;
-        console.log('New settings:', appSettings);
+
         if (appSettings.autoCheck.enabled) ipcRenderer.send('PlayerProcess', 'startTimer');
         else ipcRenderer.send('PlayerProcess', 'stopTimer');
       })
 
       ipcRenderer.on('PlayerProcess-callback', (event, arg) => {
 
+        $(document).trigger('showSerialFeedback', arg);
+
+      });
+
+      $(document).on('showSerialFeedback', function (event, arg) {
         $timeout(function(){
           self.serialInfo.answer = arg.answer;
           if (arg.isSerial) {
@@ -35,8 +40,7 @@ tabsModule.
           };
              self.startString = arg.answer;
         }, 0);
-
-      });
+      }) ;
 
       this.tabTemplate = () => self.currentTab;
     }

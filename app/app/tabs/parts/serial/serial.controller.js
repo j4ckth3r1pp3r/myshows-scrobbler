@@ -8,6 +8,11 @@ tabsModule.
       shell.openExternal(url);
     }
 
+    $scope.closeSerialTab = function () {
+      var arg = {isSerial: false};
+      $(document).trigger('showSerialFeedback', arg);
+    }
+
 
     //---- Получаем инфу по названию файла ----//
     function getSerialInfo () {

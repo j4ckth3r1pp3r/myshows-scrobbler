@@ -7,7 +7,7 @@
       <label>Период проверки (в секундах) (<span title="С какой периодичностью приложение будет проверять плеер">?</span>):</label>
       <input type="number" class="form-control" ng-disabled="!$ctrl.appSettings.autoCheck.enabled" ng-model="$ctrl.periodInSecond" ng-change="$ctrl.periodToMs()">
       <br>
-      <label>Плеер (<span title="Какой именно плеер нужно использовать">?</span>):</label>
+      <label>Плеер (<span title="Какой именно плеер нужно использовать. При выборе своего вариант запишите название процесса плеера без расширения">?</span>):</label>
       <select class="form-control" ng-options="item as item.label for item in $ctrl.playerOptions track by item.process" ng-change="$ctrl.changeOption()" ng-model="$ctrl.playerOptionCurrent">
       </select>
       <br>

@@ -50,46 +50,56 @@ indexModule.
       ipcRenderer.send('getAppSettings');
       ipcRenderer.on('pushAppSettings', (event, r) => {
         self.appSettings.all = r;
-        if (self.appSettings.all.autoCheck.enabled) ipcRenderer.send('PlayerProcess', 'timer');
+        if (self.appSettings.all.autoCheck.enabled) ipcRenderer.send('PlayerProcess', 'startTimer');
       });
 
+      ipcRenderer.on('refreshSettings', (event, r) => {
+        self.appSettings = r;
+      })
+
       //---- Функции для Drag'n'Drop ----//
-      // var holder = document.querySelector('.draggable');
-      //
-      // $(window).resize(function() {
-      //   var marginTextBorder = ($(holder).find('.border').height() / 2) - $(holder).find('h2').height() / 2;
-      //   $(holder).find('h2').css('margin-top', marginTextBorder);
-      // });
-      //
-      // $(window).trigger('resize');
-      //
-      //
-      // holder.ondragover = () => {
-      //     $(holder).addClass('dragover');
-      //     return false;
-      // };
-      //
-      // holder.ondragleave = () => {
-      //     $(holder).removeClass('dragover');
-      //     return false;
-      // };
-      //
-      // holder.ondragend = () => {
-      //     $(holder).removeClass('dragover');
-      //     return false;
-      // };
-      //
-      // holder.ondrop = (e) => {
-      //     e.preventDefault();
-      //     $(holder).removeClass('dragover');
-      //     msrequest.get('shows.SearchByFile', {'file': e.dataTransfer.files[0].name}).then((r) => {
-      //       console.log('Сукес: ', r.data);
-      //     }, (err) => {
-      //       console.log('Error: ', err);
-      //     });
-      //
-      //     return false;
-      // };
+      var holder = document.querySelector('.draggable');
+      var tab = document.querySelector('body');
+
+      $(window).resize(function() {
+        var marginTextBorder = ($(holder).find('.border').height() / 2) - $(holder).find('h2').height() / 2;
+        $(holder).find('h2').css('margin-top', marginTextBorder);
+      });
+
+      $(window).trigger('resize');
+
+
+      tab.ondragover = () => {
+          $(holder).addClass('dragover');
+          return false;
+      };
+
+      tab.ondragleave = () => {
+          $(holder).removeClass('dragover');
+          return false;
+      };
+
+      tab.ondragend = () => {
+          $(holder).removeClass('dragover');
+          return false;
+      };
+
+      tab.ondrop = (e) => {
+          e.preventDefault();
+          // e.dataTransfer.files[0].name
+          $(holder).removeClass('dragover');
+
+          var arg = {
+            isSerial: true,
+            answer: e.dataTransfer.files[0].name
+          };
+
+          $(document).trigger('showSerialFeedback', arg);
+
+          return false;
+      };
+
+      $('[href="#"]').click(function(e) {e.preventDefault()});
 
     }
   });
