@@ -8,4 +8,15 @@
       <li>Перетащить серию в окно</li>
     </ul>
   </div>
+  <div class="notfound" ng-show="$ctrl.isNotFoundSerial">
+    <div class="close-serial-tab" ng-click="$ctrl.closeNotFoundNotification()">
+      <div class="close-word">
+        Закрыть
+      </div>
+      <span></span>
+      <span></span>
+    </div>
+    <h1>Серия не найдена</h1>
+    <p>Попробуйте переименовать название серии</p>
+  </div>
 </div>

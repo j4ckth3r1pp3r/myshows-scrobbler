@@ -3,23 +3,35 @@
   "version": "0.0.1",
   "description": "Scrobbler for MyShows.me",
   "main": "main.js",
-  "scripts": {
-    "start": "electron ."
-  },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/j4ckth3r1pp3r/myshows-scrobbler",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "MyShows",
+    "Scrobbler"
   ],
   "author": "J4ck Th3 R1pp3r",
   "license": "CC0-1.0",
+  "build": {
+    "appId": "com.j4ckth3r1pp3r.mscrobbler",
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    }
+  },
+  "scripts": {
+    "start": "electron .",
+    "pack": "build --dir",
+    "dist": "build"
+  },
+  "directories": {
+    "app": "D:\\j4ck\\Electron\\electron-quick-start"
+  },
   "devDependencies": {
     "electron": "^1.4.1"
   },
   "dependencies": {
-    "jquery": "^3.1.1"
+    "jquery": "^3.1.1",
+    "request": "^1.0",
+    "node-windows": "0.1.12"
   }
 }

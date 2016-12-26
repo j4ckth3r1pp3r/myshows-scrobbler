@@ -20,7 +20,8 @@
 .navbar-brand .ng-hide-remove {
   animation: scaleFromX 0.5s ease;
 }
-.personal-player-input.ng-hide-add {
+.personal-player-input.ng-hide-add,
+.notfound.ng-hide-add {
   animation: toTop 0.5s  ease;
 }
 
@@ -39,7 +40,9 @@ button:disabled {
   position: absolute;
 }
 
-.change-tabs.ng-enter, .newSerialClass {
+.change-tabs.ng-enter,
+.newSerialClass,
+.notfound.ng-hide-remove {
   animation: 0.5s fromLeft ease;
 }
 .change-tabs.ng-leave {

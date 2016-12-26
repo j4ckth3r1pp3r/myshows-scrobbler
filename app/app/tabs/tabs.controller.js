@@ -19,6 +19,7 @@ tabsModule.
       ipcRenderer.on('PlayerProcess-callback', (event, arg) => {
 
         $(document).trigger('showSerialFeedback', arg);
+        self.isNotFoundSerial = false;
 
       });
 
@@ -26,6 +27,7 @@ tabsModule.
         $timeout(function(){
           self.serialInfo.answer = arg.answer;
           if (arg.isSerial) {
+            self.closeNotFoundNotification();
             windowTitle.name = windowTitle.appName + ' - ' + arg.answer;
             windowTitle.playStatus = true;
             self.currentTab = 'tabs/parts/serial/serial.template.html'
@@ -40,7 +42,17 @@ tabsModule.
           };
              self.startString = arg.answer;
         }, 0);
-      }) ;
+      });
+
+      //---- Серия не найдена ----//
+      $(document).on('serialNotFound', function () {
+        self.currentTab = self.defaultTab;
+        windowTitle.name = windowTitle.appName;
+        windowTitle.playStatus = false;
+        self.isNotFoundSerial = true;
+      });
+
+      self.closeNotFoundNotification = () => {self.isNotFoundSerial = false};
 
       this.tabTemplate = () => self.currentTab;
     }

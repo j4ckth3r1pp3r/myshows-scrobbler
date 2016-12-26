@@ -335,42 +335,76 @@ label span[title] {
   transform: translateY(-10px);
 }
 
-/*.close-serial-tab:hover span:nth-child(2) {
-  animation: 1s firstFigureHover ease;
-  animation-fill-mode:forwards;
+.notfound {
+  color: #e8e8e8;
+  background-image: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+  position: relative;
+  left: -15px;
+  width: 104%;
+  padding-left: 35px;
+  padding-top: 0px;
 }
 
-.close-serial-tab:hover span:nth-child(3) {
-  animation: 1s secondFigureHover ease;
-  animation-fill-mode:forwards;
+.notfound .close-serial-tab {
+    top: 189px;
+    right: 5px;
 }
 
-@keyframes firstFigureHover {
-  0% {
-    transform: rotate(45deg);
-  }
-  49% {
-    transform: rotate(0);
-  }
-  50% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(-50px);
-  }
+.notfound .close-serial-tab span {
+    background-color: #fff;
 }
 
-@keyframes secondFigureHover {
-  0% {
-    transform: rotate(-45deg);
-  }
-  49% {
-    transform: rotate(0);
-  }
-  50% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(50px);
-  }
-}*/
+.notfound .close-serial-tab .close-word {
+    color: #373737;
+}
+
+.notfound .close-serial-tab:hover span {
+    background-image: linear-gradient(to bottom, #d4d4d4 0%, #cacaca 100%);
+}
+
+.elementRate {
+  width: 320px;
+}
+
+.elementRate > span {
+  padding-top: 5px;
+}
+
+.elementRate > span.glyphicon {
+  position: relative;
+  top: 3.5px;
+  left: 5px;
+
+  color: #ae0000;
+  font-size: 1.2em;
+}
+
+.elementRate > span:last-of-type {
+  position: relative;
+  top: 4px;
+
+  font-size: 0.9em;
+  color: #808080;
+
+  float: right;
+}
+
+.button-right-image {
+  height: 180px;
+  position: relative;
+}
+
+.button-right-image button:last-of-type {
+  position: absolute;
+  bottom: -10px;
+  left: 320px;
+}
+
+.button-right-image button:last-of-type,
+.button-right-image button:last-of-type:hover {
+  cursor: default;
+}
+
+.button-right-image .btn-dark {
+    width: 145px;
+}

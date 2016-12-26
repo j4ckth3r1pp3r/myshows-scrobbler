@@ -18,8 +18,14 @@
       <div class="button-right-image" ng-show="buttonsRightImageShow">
         <a class="btn btn-dark" ng-click="openExternal('https://myshows.me/view/'+myshowsInfo.currentEpisode.showId+'/')">MyShows</a>
         <button class="btn btn-dark episode-check" ng-click="checkEpisode()" ng-disabled="checkButton.disabled" ng-hide="myshowsInfo.currentEpisode.watchStatus">{{checkButton.text}}</button>
+        <button class="btn btn-dark episode-check">{{myshowsInfo.bySite.serialStatus}}</button>
       </div>
       <div class="clearfix"></div>
+      <p class="elementRate">
+        <span>Моя оценка</span>
+        <span ng-repeat="rating in getNumber(myshowsInfo.bySite.rating) track by $index" class="glyphicon glyphicon-star"></span>
+        <span>{{myshowsInfo.bySite.ratingTitle}}</span>
+      </p>
       <p class="current-episode">Смотришь: <b>{{myshowsInfo.currentEpisode.shortName}}</b></p>
 
     </div>

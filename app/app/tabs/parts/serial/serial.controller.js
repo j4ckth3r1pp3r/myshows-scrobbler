@@ -13,6 +13,10 @@ tabsModule.
       $(document).trigger('showSerialFeedback', arg);
     }
 
+    //---- создаем массив для ngRepeat ----//
+    $scope.getNumber = function(num) {
+        return (new Array(num));
+    }
 
     //---- Получаем инфу по названию файла ----//
     function getSerialInfo () {
@@ -34,6 +38,7 @@ tabsModule.
         getSerialInfoByUser($scope.myshowsInfo.byFile.id);
       }, (err) => {
         $scope.serialTemplate = 'notfound';
+        $(document).trigger('serialNotFound');
       });
     }
 
@@ -69,10 +74,16 @@ tabsModule.
         $scope.buttonsRightImageShow = true;
       }, 1000);
 
-      //---- Добавляем фон сериала ----//
+      //---- Добавляем фон сериала и личную инфу ----//
       msrequest.getPage(`https://myshows.me/view/${$scope.myshowsInfo.currentEpisode.showId}/`).then((r) => {
         r.data = r.data.replace(/body/g, 'bodytag');
         r.data = r.data.replace(/html/g, 'htmltag');
+        $scope.myshowsInfo.bySite = {};
+        $scope.myshowsInfo.bySite.rating = parseInt($(r.data).find('.elementRate').attr('class').match(/_rate(\d)/)[1]);
+        $scope.myshowsInfo.bySite.ratingTitle = $(r.data).find('#user-rating-title').text();
+        $scope.myshowsInfo.bySite.serialStatus = $(r.data).find('.toggle-show-status').not('._light').find('b').text();
+        console.log($scope.myshowsInfo.bySite.serialStatus);
+
         $scope.serialPage.background = $(r.data).find('bodytag').attr('style').match(/url\((.*)\)/)[1];
         $(window).resize(function() {
           $('.serial-loading, .light-background').not('.uil-facebook-css').height($(window).height() - 52);
