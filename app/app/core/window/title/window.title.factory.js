@@ -5,5 +5,6 @@ windowTitleModule.
       appName: 'MScrobbler',
       scrobblerTab: 'Скробблер',
       playStatus: false,
+      webServerStatus: true,
     }
 });

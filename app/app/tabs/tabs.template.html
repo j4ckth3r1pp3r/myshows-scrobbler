@@ -19,4 +19,14 @@
     <h1>Серия не найдена</h1>
     <p>Попробуйте переименовать название серии</p>
   </div>
+  <div ng-hide="$ctrl.windowTitle.webServerStatus" class="webServerStatus">
+    <p>Веб-интерфейс выключен!</p>
+    <div class="close-serial-tab" ng-click="$ctrl.closeWebServerNotification()">
+      <div class="close-word">
+        Закрыть
+      </div>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
 </div>

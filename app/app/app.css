@@ -350,15 +350,15 @@ label span[title] {
     right: 5px;
 }
 
-.notfound .close-serial-tab span {
+.notfound .close-serial-tab span, .webServerStatus .close-serial-tab span {
     background-color: #fff;
 }
 
-.notfound .close-serial-tab .close-word {
+.notfound .close-serial-tab .close-word, .webServerStatus .close-serial-tab .close-word {
     color: #373737;
 }
 
-.notfound .close-serial-tab:hover span {
+.notfound .close-serial-tab:hover span, .webServerStatus .close-serial-tab:hover span {
     background-image: linear-gradient(to bottom, #d4d4d4 0%, #cacaca 100%);
 }
 
@@ -407,4 +407,25 @@ label span[title] {
 
 .button-right-image .btn-dark {
     width: 145px;
+}
+
+.webServerStatus {
+  background-image: linear-gradient(to bottom, #d9534f 0%, #c12e2a 100%);
+  color: #fff;
+  padding: 5px;
+  position: absolute;
+  bottom: 10px;
+  width: 96%;
+}
+
+.webServerStatus .close-serial-tab {
+    top: initial;
+    bottom: 16px;
+    right: 23px;
+}
+
+.webServerStatus p {
+  position: relative;
+  top: 5px;
+  left: 5px;
 }

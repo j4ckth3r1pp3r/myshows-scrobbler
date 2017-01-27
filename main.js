@@ -8,6 +8,7 @@ const fs = require('fs'); //Файловая система
 const appdata = app.getPath('userData') + '/'; //Папка для сохранения в локалке
 const request = require('request'); //Запросы на файлы
 const wincmd = require('node-windows'); //Чекаем процессы
+const registry = require('winreg'); //Регистр
 const {Tray, Menu} = require('electron');
 const {webContents} = require('electron');
 let tray = null;
@@ -244,59 +245,77 @@ ipcMain.on('toogleDevTools', (event, arg = {}) => {
 
 //---- Детектим плеер для скробблерства и посылаем на фронт ответ ----//
 
-var playerProcessAnswer,
-playerProcessLastState = '',
-playerInfo = {};
+// var playerProcessAnswer,
+// playerProcessLastState = '',
+// playerInfo = {};
+//
+// var serialNameRegExp = /([^\s]*s\d{1,4}.{0,1}e\d{1,4}[^\s]*)/;
+// var otherVideoRegExp = /([^\s]*\.[^\s]*)/;
+//
+// ipcMain.on('PlayerProcess', function (event, arg = {}) {
+//
+//   if (arg == 'startTimer') sendPlayerEventByInterval(event);
+//   else if (arg == 'stopTimer') sendPlayerEventByInterval('stop');
+//   else if (arg == 'force') {
+//     //Обнуляем последнее состояние
+//     playerProcessLastState = '';
+//     sendPlayerEvent(event);
+//   }
+//
+//
+// });
+//
+//
+// function sendPlayerEvent (event) {
+//
+//   playerInfo.isSerial = false;
+//
+//   wincmd.list(function(svc){
+//
+//     var playerProcess = svc.find(({ImageName}) => ImageName === appSettings.playerProcess + '.exe');
+//
+//     if (playerProcess && playerProcess.WindowTitle.match(serialNameRegExp)) {
+//       playerProcessAnswer = playerProcess.WindowTitle.match(serialNameRegExp)[1];
+//       playerInfo.isSerial = true;
+//     } else if (playerProcess && playerProcess.WindowTitle.match(otherVideoRegExp)) {
+//       playerProcessAnswer = playerProcess.WindowTitle.match(otherVideoRegExp)[1];
+//     } else playerProcessAnswer = 'Player hasn\'t started yet';
+//
+//     //---- Если состояние поменялось, отправляем на фронт и потом записываем новое состояние ----//
+//     if (playerProcessAnswer !== playerProcessLastState) {
+//       playerInfo.answer = playerProcessAnswer;
+//       event.sender.send('PlayerProcess-callback', playerInfo);
+//     };
+//     playerProcessLastState = playerProcessAnswer;
+//   },true);
+// }
+//
+// var intervalUpdate;
+//
+// function sendPlayerEventByInterval(event) {
+//   if (event == 'stop') {
+//     clearInterval(intervalUpdate);
+//     return
+//   }
+//   intervalUpdate = setInterval(function() {
+//     sendPlayerEvent(event);
+//   }, appSettings.autoCheck.period);
+// }
 
-var serialNameRegExp = /([^\s]*s\d{1,4}.{0,1}e\d{1,4}[^\s]*)/;
-var otherVideoRegExp = /([^\s]*\.[^\s]*)/;
+//---- Windows Register with MPC ----//
+ipcMain.on('mpcWebServerStatus', (event, arg = {}) => {
+  var regKey = new registry({
+    hive: registry.HKCU,
+    key:  '\\Software\\MPC-HC\\MPC-HC\\Settings'
+  });
 
-ipcMain.on('PlayerProcess', function (event, arg = {}) {
-
-  if (arg == 'startTimer') sendPlayerEventByInterval(event);
-  else if (arg == 'stopTimer') sendPlayerEventByInterval('stop');
-  else if (arg == 'force') {
-    //Обнуляем последнее состояние
-    playerProcessLastState = '';
-    sendPlayerEvent(event);
-  }
-
-
+  regKey.values(function (err, items /* array of RegistryItem */) {
+    let isWebServerOn = items.find(({name}) => name === 'EnableWebServer'),
+     webServerPort = items.find(({name}) => name === 'WebServerPort'),
+     webServer = {
+       isOn : parseInt(isWebServerOn.value),
+       port : parseInt(webServerPort.value)
+     };
+    event.sender.send('mpcWebServerStatusFeedback', webServer);
+  });
 });
-
-
-function sendPlayerEvent (event) {
-
-  playerInfo.isSerial = false;
-
-  wincmd.list(function(svc){
-
-    var playerProcess = svc.find(({ImageName}) => ImageName === appSettings.playerProcess + '.exe');
-
-    if (playerProcess && playerProcess.WindowTitle.match(serialNameRegExp)) {
-      playerProcessAnswer = playerProcess.WindowTitle.match(serialNameRegExp)[1];
-      playerInfo.isSerial = true;
-    } else if (playerProcess && playerProcess.WindowTitle.match(otherVideoRegExp)) {
-      playerProcessAnswer = playerProcess.WindowTitle.match(otherVideoRegExp)[1];
-    } else playerProcessAnswer = 'Player hasn\'t started yet';
-
-    //---- Если состояние поменялось, отправляем на фронт и потом записываем новое состояние ----//
-    if (playerProcessAnswer !== playerProcessLastState) {
-      playerInfo.answer = playerProcessAnswer;
-      event.sender.send('PlayerProcess-callback', playerInfo);
-    };
-    playerProcessLastState = playerProcessAnswer;
-  },true);
-}
-
-var intervalUpdate;
-
-function sendPlayerEventByInterval(event) {
-  if (event == 'stop') {
-    clearInterval(intervalUpdate);
-    return
-  }
-  intervalUpdate = setInterval(function() {
-    sendPlayerEvent(event);
-  }, appSettings.autoCheck.period);
-}

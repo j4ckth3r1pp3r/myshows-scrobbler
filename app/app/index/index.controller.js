@@ -44,7 +44,6 @@ indexModule.
         self.avatar = userinfo.avatar();
       }
 
-      self.RefreshStatus = () => {ipcRenderer.send('PlayerProcess', 'force')};
       self.toogleDevTools = () => {ipcRenderer.send('toogleDevTools')};
 
       ipcRenderer.send('getAppSettings');
@@ -86,7 +85,6 @@ indexModule.
 
       tab.ondrop = (e) => {
           e.preventDefault();
-          // e.dataTransfer.files[0].name
           $(holder).removeClass('dragover');
 
           var arg = {
@@ -100,6 +98,26 @@ indexModule.
       };
 
       $('[href="#"]').click(function(e) {e.preventDefault()});
+
+      //---- MPC ----//
+      ipcRenderer.send('mpcWebServerStatus');
+      ipcRenderer.on('mpcWebServerStatusFeedback', (e, r) => {
+        windowTitle.webServerStatus = r.isOn;
+        windowTitle.webServerPort = r.port;
+      });
+
+      self.RefreshStatus = () => {
+        msrequest.getSerialNameMPC(windowTitle.webServerPort).then((data) => {
+          let arg = {
+            isSerial: true,
+            answer: data
+          };
+          $(document).trigger('showSerialFeedback', arg);
+        }, (err) => {
+          let arg = {isSerial: false};
+          $(document).trigger('showSerialFeedback', arg);
+        });
+      }
 
     }
   });

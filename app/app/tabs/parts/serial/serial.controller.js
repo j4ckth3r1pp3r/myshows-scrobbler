@@ -82,7 +82,6 @@ tabsModule.
         $scope.myshowsInfo.bySite.rating = parseInt($(r.data).find('.elementRate').attr('class').match(/_rate(\d)/)[1]);
         $scope.myshowsInfo.bySite.ratingTitle = $(r.data).find('#user-rating-title').text();
         $scope.myshowsInfo.bySite.serialStatus = $(r.data).find('.toggle-show-status').not('._light').find('b').text();
-        console.log($scope.myshowsInfo.bySite.serialStatus);
 
         $scope.serialPage.background = $(r.data).find('bodytag').attr('style').match(/url\((.*)\)/)[1];
         $(window).resize(function() {

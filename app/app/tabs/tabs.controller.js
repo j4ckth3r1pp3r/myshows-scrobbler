@@ -7,6 +7,7 @@ tabsModule.
       self.defaultTab = 'tabs/tabs.template.html';
       self.currentTab = self.defaultTab;
       self.serialInfo = serialInfo;
+      self.windowTitle = windowTitle;
 
       //---- Запускаем интевал проверки на плеер ----//
       ipcRenderer.on('refreshSettings', (event, r) => {
@@ -26,6 +27,8 @@ tabsModule.
       $(document).on('showSerialFeedback', function (event, arg) {
         $timeout(function(){
           self.serialInfo.answer = arg.answer;
+          self.isNotFoundSerial = false;
+          console.log(arg.isSerial);
           if (arg.isSerial) {
             self.closeNotFoundNotification();
             windowTitle.name = windowTitle.appName + ' - ' + arg.answer;
@@ -53,6 +56,7 @@ tabsModule.
       });
 
       self.closeNotFoundNotification = () => {self.isNotFoundSerial = false};
+      self.closeWebServerNotification = () => {self.windowTitle.webServerStatus = false};
 
       this.tabTemplate = () => self.currentTab;
     }

@@ -19,6 +19,9 @@ msrequestModule.
       },
       getPage: function (url) {
         return $http.post(url);
-      }
+      },
+      getSerialNameMPC: function (port) {
+        return $http.post(`http://localhost:${port}/status.html`).then(response => response.data.error ? $q.reject(response.data.error) : $q.resolve(response.data.match(/tus\(\"(.*?)\"/)[1]));
+      },
     };
   });
